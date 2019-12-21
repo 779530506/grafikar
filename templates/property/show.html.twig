@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Property{% endblock %}
+
+{% block body %}
+ <div class="jumbotron">
+ <div class="container">
+         <div class="row">
+        <div class="offset-md-8">
+       <h2>{{ property.title }}</h2>
+      <h4>{{ property.rooms}} piéce {{ property.surface }} m²</h4>
+      <div class="text-primary" > {{ property.price }} Euro </div>
+      <a class="btn btn-primary" href="#" role="button"> Contacter l'agence</a>
+    
+ </div>
+ </div>
+ </div>
+
+<div class="container">
+
+        <div class="col-md-8">
+            
+        </div>      
+  </div>
+
+</div>
+ <div class="container">
+   
+  <p> {{ property.description }} </p>
+    <div class="row">
+        <div class="col-md-8">
+              <table class="table">
+        <tbody>
+             <tr>
+                <th>Surface</th>
+                <td>{{ property.surface }} </td>
+            </tr>
+             <tr>
+                <th>Piece</th>
+                <td>{{ property.rooms }}</td>
+            </tr>
+            <tr>
+                <th>Chambre</th>
+                <td>{{ property.bedrooms }}</td>
+            </tr>
+             <tr>
+                <th>Etages</th>
+                <td>{{ property.floor }}</td>
+            </tr>
+              <tr>
+                <th>Chauffage</th>
+                <td>{{ property.heat }}</td>
+            </tr>
+
+
+
+        </tbody>
+    </table>
+        </div>
+
+    </div>
+   
+    <a href="{{ path('property_index') }}">back to list</a>
+
+    <a href="{{ path('property_edit', {'id': property.id}) }}">edit</a>
+
+    {{ include('property/_delete_form.html.twig') }}
+
+ </div>
+  
+  
+
+{% endblock %}
