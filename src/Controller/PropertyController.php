@@ -3,12 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Property;
+use App\Entity\PropertySearch;
+use App\Form\PropertySearchType;
 use App\Form\PropertyType;
 use App\Repository\PropertyRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/property")
@@ -18,30 +21,71 @@ class PropertyController extends AbstractController
     /**
      * @Route("/", name="property_index", methods={"GET"})
      */
-    public function index(PropertyRepository $propertyRepository): Response
+    public function index(PropertyRepository $propertyRepository,Request $request ,
+    PaginatorInterface  $paginator): Response
     {
+        $propertySearch=new PropertySearch();
+        $form=$this->createForm(PropertySearchType::class,$propertySearch);
+        $form->handleRequest($request);
+        $appointments = $paginator->paginate(
+            // Doctrine Query, not results
+            $propertyRepository->findAllVisible($propertySearch),
+            // Define the page parameter
+            $request->query->getInt('page', 1),
+            // Items per page
+            7
+        );
         return $this->render('property/index.html.twig', [
-            'properties' => $propertyRepository->findAllVisible(),
+            'properties' => $appointments,
+            'form'=>$form->createView()
         ]);
     }
 
      /**
      * @Route("/all", name="property_all", methods={"GET"})
      */
-    public function all(PropertyRepository $propertyRepository): Response
+    public function all(PropertyRepository $propertyRepository,Request $request ,
+    PaginatorInterface  $paginator): Response
     {
+        $propertySearch=new PropertySearch();
+        $form=$this->createForm(PropertySearchType::class);
+        $form->handleRequest($request); 
+        $appointments = $paginator->paginate(
+            // Doctrine Query, not results
+            $propertyRepository->findAll(),
+            // Define the page parameter
+            $request->query->getInt('page', 1),
+            // Items per page
+            8
+        );
+    
         return $this->render('property/index.html.twig', [
-            'properties' => $propertyRepository->findAll(),
+            'properties' => $appointments,
+            'form'=>$form->createView()
+           
         ]);
     }
     
      /**
      * @Route("/last", name="property_last", methods={"GET"})
      */
-    public function last(PropertyRepository $propertyRepository): Response
-    {
+    public function last(PropertyRepository $propertyRepository,Request $request ,
+    PaginatorInterface  $paginator): Response
+    { 
+        $propertySearch=new PropertySearch();
+        $form=$this->createForm(PropertySearchType::class);
+        $form->handleRequest($request);
+        $appointments = $paginator->paginate(
+            // Doctrine Query, not results
+            $propertyRepository->findLatest(),
+            // Define the page parameter
+            $request->query->getInt('page', 1),
+            // Items per page
+            6
+        );
         return $this->render('property/index.html.twig', [
-            'properties' => $propertyRepository->findLatest(),
+            'properties' => $appointments,
+            'form'=>$form->createView()
         ]);
     }
     /**

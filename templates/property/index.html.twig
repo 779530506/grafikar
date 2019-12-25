@@ -3,55 +3,59 @@
 {% block title %}Property index{% endblock %}
 
 {% block body %}
-    <h1>Property index</h1>
+<div class="jumbotron">
+ <div class="container">
+   {{ form_start(form)  }}
+         <div class="form-row">
+    
+      <div class="col">
+         {{ form_row(form.maxPrice)  }} 
+      </div>
+       <div class="col">
+          {{ form_row(form.minSurface)  }}
+      </div>
+         <div class="col">
+         <button type="submit" class="btn btn-primary">search</button>
+       
+      </div>            
+ </div>
+        
+      {{ form_end(form)  }}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Surface</th>
-                <th>Rooms</th>
-                <th>Bedrooms</th>
-                <th>Floor</th>
-                <th>Price</th>
-                <th>Heat</th>
-                <th>City</th>
-                <th>Address</th>
-                <th>Postal_code</th>
-                <th>Sold</th>
-                <th>Created_at</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for property in properties %}
-            <tr>
-                <td>{{ property.id }}</td>
-                <td>{{ property.title }}</td>
-                <td>{{ property.surface }}</td>
-                <td>{{ property.rooms }}</td>
-                <td>{{ property.bedrooms }}</td>
-                <td>{{ property.floor }}</td>
-                <td>{{ property.price }}</td>
-                <td>{{ property.heat }}</td>
-                <td>{{ property.city }}</td>
-                <td>{{ property.address }}</td>
-                <td>{{ property.postalCode }}</td>
-                <td>{{ property.sold ? 'Yes' : 'No' }}</td>
-                <td>{{ property.createdAt ? property.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('property_show', {'id': property.id}) }}">show</a>
-                    <a href="{{ path('property_edit', {'id': property.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="15">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+ </div>
+ </div>
+<div class="container">
+
+ <div class="row">
+   {% for property in  properties %}
+  
+              <div class="col-md-3">
+                 <h5>{{ property.rooms}} piéce {{ property.surface }} m²</h5>
+                 <div class="text-primary" > {{ property.price }} Euro </div>
+                  <p> <a class="btn btn-success"   href="{{ path('property_show',{'id':property.id} ) }}">Voir</a> </p>
+                 <a class="btn btn-primary" href="#" role="button"> Contacter l'agence</a>
+            </div>  
+   
+   {% endfor %}  
+
+   </div>  <br>
+      <div class="navigation">
+            {{ knp_pagination_render(properties) }}
+        </div>
+  </div>
+
+ <div class="container">
+
+    <div class="row">
+        <div class="col-md-8">
+        </div>
+
+    </div>
+   
+    <a href="{{ path('property_index') }}">back to list</a>
+
+
+ </div>
 
     <a href="{{ path('property_new') }}">Create new</a>
 {% endblock %}
